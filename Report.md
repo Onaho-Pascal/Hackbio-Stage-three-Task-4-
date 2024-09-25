@@ -17,17 +17,17 @@ For this analysis, we utilized the COAD dataset from TCGA, which includes omics 
 ### Biomarker discovery
 Using the `TCGAbiolinks` library and the `edgeR` package, we performed differential expression analysis (DEA) to identify differentially expressed genes (DEGs) between the two groups. Genes were considered differentially expressed if they had an adjusted p-value < 0.05 and an absolute log fold change > 1. This analysis identified 752 upregulated and 371 downregulated genes. Enrichment analysis (EA) was then performed using the `TCGAbiolinks` library, focusing on Gene Ontology (GO) terms, with results visualized in a bar plot.
 
-![heatmap](https://github.com/Onaho-Pascal/Hackbio-Stage-three-Task-4-/blob/main/Figures/Heatmap_DEGs_female_vs_male.png)
-![Picture1](https://github.com/user-attachments/assets/fec828ed-1d55-4032-ba42-f187681b25af)
+![Heatmap](https://github.com/user-attachments/assets/b82af36c-ca2b-43fa-b59a-17462a42ae06)
+![Caption1](https://github.com/user-attachments/assets/fec828ed-1d55-4032-ba42-f187681b25af)
 
-![Volcanoplot](https://github.com/user-attachments/assets/d93d2999-870e-45a9-a645-904ca8dabf90)
-![Picture2](https://github.com/user-attachments/assets/ec9d42ec-6837-4683-a67d-dced5d3fb6cf)
+![Volcano_plot_DEGs_female_vs_male](https://github.com/user-attachments/assets/3fdcea58-bf21-41c5-a639-39dee41332fd)
+![Caption2](https://github.com/user-attachments/assets/ec9d42ec-6837-4683-a67d-dced5d3fb6cf)
 
-![EA_up](https://github.com/Onaho-Pascal/Hackbio-Stage-three-Task-4-/blob/main/Figures/EA_upregulated_female_vs_male.pdf)
-![Picture3](https://github.com/user-attachments/assets/7ce12ea5-b393-49fd-9012-33121a13f652)
+[EA_upregulated_female_vs_male.pdf](https://github.com/user-attachments/files/17129616/EA_upregulated_female_vs_male.pdf)
+![Caption3](https://github.com/user-attachments/assets/7ce12ea5-b393-49fd-9012-33121a13f652)
 
-![EA_dn](https://github.com/Onaho-Pascal/Hackbio-Stage-three-Task-4-/blob/main/Figures/EA_downregulated_female_vs_male.pdf)
-![Picture4](https://github.com/user-attachments/assets/e0f12ec4-ade0-4588-bcf2-0b6a174e3c76)
+[EA_downregulated_female_vs_male.pdf](https://github.com/user-attachments/files/17129618/EA_downregulated_female_vs_male.pdf)
+![Caption4](https://github.com/user-attachments/assets/e0f12ec4-ade0-4588-bcf2-0b6a174e3c76)
 
 ### Machine Learning
 The K-Nearest Neighbor (KNN) machine learning model was employed to identify potential biomarkers and important genes for predicting gender. In bioinformatics, KNN classifies biological data, such as gene expression profiles and DNA sequences, by comparing an unknown sample to its nearest neighbors in a labeled dataset [3]. The KNN model achieved an overall accuracy of 66.67% in classifying gender, with a high sensitivity of 83.33% for correctly identifying females. However, its specificity for males was only 50%, reflecting a tendency to misclassify males as females, as indicated by a positive predictive value (PPV) of 62.5% for females and a negative predictive value (NPV) of 75% for males. The Kappa statistics of 0.3333 shows moderate agreement between predictions and actual values, while McNemar’s test indicates no significant difference in error types across genders. The model identified key genes associated with gender classification, including RPS4Y1, APOH, CYP1A1, GSTM1, and PF4V1. 
