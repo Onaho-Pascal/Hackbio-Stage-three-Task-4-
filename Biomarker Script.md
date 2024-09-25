@@ -1,39 +1,36 @@
-######################################
-#### HackBio internship - stage 3 #### 
-######################################
 
-# load necessary libraries
-
+* load necessary libraries
+```
 library("TCGAbiolinks")
 library(SummarizedExperiment)
 library(edgeR)
 library(gplots)
 library(ggplot2)
 library(biomaRt)
+```
+* Pick any cancer type/subtype and download from TCGA
 
-# pick any cancer type/subtype and download from TCGA ####
-
-# get project information 
+* Get project information and download data set
+```
 getProjectSummary("TCGA-COAD")
 
-# download the dataset
 tcga_coad <- GDCquery(project = "TCGA-COAD",
                       data.category = "Transcriptome Profiling",
                       data.type = "Gene Expression Quantification")
 GDCdownload(tcga_coad) 
-coad_data <- GDCprepare(tcga_coad) 
-head(coad_data) 
-View(coad_data)
+coad_data <- GDCprepare(tcga_coad)
+```
 
-# explore metadata information
+* Explore metadata information
+
+```
 coad_data$barcode
-
-coad_data$race 
-table(coad_data$race) 
-
-coad_data$tumor_descriptor 
-table(coad_data$tumor_descriptor) 
-
+coad_data$race
+table(coad_data$race)
+ 
+coad_data$tumor_descriptor
+table(coad_data$tumor_descriptor)
+ 
 coad_data$ajcc_pathologic_stage 
 table(coad_data$ajcc_pathologic_stage)
 
@@ -42,36 +39,38 @@ table(coad_data$ajcc_pathologic_m)
 
 coad_data$gender
 table(coad_data$gender)
-
-# create a simple metadata 
+```
+* Create a simple metadata and subset the metadata into Female and Male
+```
 metadata_df <- data.frame("barcode" = coad_data$barcode,
                           "race" = coad_data$race,
                           'tumor_type' = coad_data$tumor_descriptor,
                           'stage' = coad_data$ajcc_pathologic_stage,
                           'metastasis_status' = coad_data$ajcc_pathologic_m,
                           'gender' = coad_data$gender)
-View(metadata_df)
-
-# subset the metadata female vs male 
+ 
 coad_rawdata <- assays(coad_data) 
 dim(coad_rawdata$unstranded) 
 View(coad_rawdata$unstranded)
-
-# downsize the data to 20 vs 20  
+```
+* **Downsize the data to 20 vs 20**
+```
 samples <- c(subset(metadata_df, gender == "female")$barcode[c(1:20)],
                     subset(metadata_df, gender == "male")$barcode[c(1:20)])
 final_df <- coad_rawdata$unstranded[ , c(samples)]
 dim(final_df)
 View(final_df)
 
-# clean and preprocess the data, handling missing values, normalizing gene expression data ####
+```
+* **Clean and preprocess the data, handling missing values, normalizing gene expression data**
+```
 table(is.na(final_df)) # no NAs
 norm_data <- TCGAanalyze_Normalization(tabDF = final_df, geneInfo = geneInfoHT, method = "geneLength")
 
 filt_data <- TCGAanalyze_Filtering(tabDF = norm_data,
                                           method = "quantile",
                                           qnt.cut = 0.25)
-
+```
 # differential expression analysis ####
 DEA <- TCGAanalyze_DEA(mat1 = filt_data[ , c(samples)[1:20]], 
                               mat2 = filt_data[ , c(samples)[21:40]],
