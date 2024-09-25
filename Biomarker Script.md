@@ -1,5 +1,5 @@
 
-* load necessary libraries
+* **Load necessary libraries**
 ```
 library("TCGAbiolinks")
 library(SummarizedExperiment)
@@ -8,9 +8,8 @@ library(gplots)
 library(ggplot2)
 library(biomaRt)
 ```
-* Pick any cancer type/subtype and download from TCGA
+* **Pick any cancer type/subtype and download from TCGA, get project Information and download data set**
 
-* Get project information and download data set
 ```
 getProjectSummary("TCGA-COAD")
 
@@ -21,7 +20,7 @@ GDCdownload(tcga_coad)
 coad_data <- GDCprepare(tcga_coad)
 ```
 
-* Explore metadata information
+* **Explore metadata information**
 
 ```
 coad_data$barcode
@@ -40,7 +39,7 @@ table(coad_data$ajcc_pathologic_m)
 coad_data$gender
 table(coad_data$gender)
 ```
-* Create a simple metadata and subset the metadata into Female and Male
+* **Create a simple metadata and subset the metadata into Female and Male**
 ```
 metadata_df <- data.frame("barcode" = coad_data$barcode,
                           "race" = coad_data$race,
@@ -71,7 +70,8 @@ filt_data <- TCGAanalyze_Filtering(tabDF = norm_data,
                                           method = "quantile",
                                           qnt.cut = 0.25)
 ```
-# differential expression analysis ####
+* **Differential expression analysis**
+```
 DEA <- TCGAanalyze_DEA(mat1 = filt_data[ , c(samples)[1:20]], 
                               mat2 = filt_data[ , c(samples)[21:40]],
                               Cond1type = "female",
@@ -85,8 +85,10 @@ DEA.Level <-
                        filt_data[ , c(samples)[1:20]],
                        filt_data[ , c(samples)[21:40]])
 View(DEA.Level)
+```
 
-# visualization of top DEGs with a heatmap color coded based on the samples (female = red, male = blue)
+* **Visualization of top DEGs with a heatmap color coded based on the samples (female = red, male = blue)**
+```
 heat.DEGs <- filt_data[rownames(DEA.Level), ]
 
 # color code
@@ -136,11 +138,11 @@ ggplot(DEA.Level, aes(x = logFC, y = -log10(FDR))) +
         axis.title = element_text(size = 14), 
         plot.title = element_text(hjust = 0.5, size = 16),
         legend.position = "top")
+```
 
-
-# functional enrichment analysis ####
-
-# selection of up- and down-regulated genes from the DEA 
+* **Functional enrichment analysis**
+```
+#selection of up- and down-regulated genes from the DEA 
 upreg.genes <- rownames(subset(DEA.Level, logFC > 1 & FDR < 0.05))
 dnreg.genes <- rownames(subset(DEA.Level, logFC < -1 & FDR < 0.05))
 
@@ -184,3 +186,4 @@ TCGAvisualize_EAbarplot(tf = rownames(dn.EA$ResBP),
                         text.size = 2, 
                         fig.width = 30,
                         fig.height = 15)
+```
