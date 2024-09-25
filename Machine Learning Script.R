@@ -14,8 +14,7 @@ set.seed(123)
 
 # Load the main and meta data
 carcinoma_data <- read.csv(file = "raw_expression_data_tcga-coad.csv", header = TRUE)
-carcinoma_meta <- read.csv(file = "metadata tcga-coad0.csv", header = TRUE)
-
+carcinoma_meta <- read.csv(file = "meta tcga-coad data.csv", header = TRUE)
 
 
 
