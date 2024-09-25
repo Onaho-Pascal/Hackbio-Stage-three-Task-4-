@@ -1,32 +1,75 @@
-# Load the ML packages and set seed (for the random number generator.
-#This ensures that the sequence of random numbers generated will be the same each time you run the code.
-#This is crucial for reproducibility in statistical analysis and simulations, allowing others (or yourself at a later time) to obtain the same results.
+# Load the ML packages and set seed (for the random number generator. 
+#This ensures that the sequence of random numbers generated will be the same each time you run the code. 
+#This is crucial for reproducibility in statistical analysis and simulations, allowing others (or yourself at a later time) to obtain the same results.)
+
 library(caret)
 library(DALEX)
 library(pROC)
+library(DALEXtra)
 
-# Step 1 -----> Working with two sets of data (Main data and Meta data) which were named in the enviroment as "carcinoma_data.rds" and "carcinoma_meta.rds" and the file was uploaded via environment.
-carcinoma.data <- readRDS("carcinoma_data.rds")
-carcinoma.meta <- readRDS("carcinoma_meta.rds")
+library(dplyr) 
+library(tidyr)
 
-# Step 2
-SDs = apply(carcinoma.data, 2, sd)
-# This line calculates the standard deviation for each column (each gene) in carcinoma.data and stores the results in the vector SDs.
+set.seed(123)
+
+# Load the main and meta data
+carcinoma_data <- read.csv(file = "raw_expression_data_tcga-coad.csv", header = TRUE)
+carcinoma_meta <- read.csv(file = "metadata tcga-coad0.csv", header = TRUE)
+
+
+
+
+# Preprocessing the main data
+
+
+rownames(carcinoma_data) <- carcinoma_data$X # Making column "X" the row names, rather than numerical "1", "2", "3"...
+carcinoma_data$X <- NULL # Removing duplicate columns as row names
+
+
+boxplot(carcinoma_data, col = "lightblue")
+carcinoma_data <- log2(carcinoma_data + 1) # A log transformation to normalize the data
+boxplot(carcinoma_data, col = "lightblue")
+
+
+colnames(carcinoma_data) <- gsub("\\.", "-", colnames(carcinoma_data)) # Editing the format of the main data so it becomes similar to the rownames of the meta data
+
+# Transpose the main data
+carcinoma_data <- data.frame(t(carcinoma_data))
+
+SDs = apply(carcinoma_data, 2, sd)
+# This line calculates the standard deviation for each column (each gene) in carcinoma_data and stores the results in the vector SDs. 
 # A higher standard deviation indicates greater variability in the gene expression levels.
+
 topPredicts = order(SDs, decreasing = T)[1:3000]
-
 #After calculating the standard deviation, this lines ensures that the top 3000 genes with the highest SD are selected, and in descending order.
-carcinoma.data = carcinoma.data[, topPredicts]
 
-#The carcinoma.data is now reduced to only include the top 3000 genes that have the highest variability,
-# which are often more informative for subsequent analyses like classification
 
-# Step 3: Merge the data
-carcinoma_merged_data <- merge(carcinoma.data, carcinoma.meta, by = "row.names")
+carcinoma_data = carcinoma_data[, topPredicts]
+#The trans_data is now reduced to only include the top 3000 genes that have the highest variability, which are often more informative for subsequent analyses like classification
+
+
+
+# Preprocessing the meta data
+anyNA(carcinoma_meta)
+sum(is.na(carcinoma_meta))
+carcinoma_meta <- carcinoma_meta %>% drop_na()
+anyNA(carcinoma_meta)
+
+
+
+rownames(carcinoma_meta) <- carcinoma_meta$barcode #changed the rownames from numerical "1, 2, 3, 4, 5...." to the Barcode
+
+carcinoma_meta$barcode <- NULL #to remove the row name duplicate
+
+
+# Merge both data
+carcinoma_merged_data <- merge(carcinoma_data, carcinoma_meta, by = "row.names") #merging of both main and meta data
+
 dim(carcinoma_merged_data)
 View(carcinoma_merged_data)
 rownames(carcinoma_merged_data) <- carcinoma_merged_data$Row.names # to ensure the row names are the samples
 carcinoma_merged_data$Row.names <- NULL #to remove duplicate columns of row names
+
 
 # Step 4: Further preprocessing steps
 
