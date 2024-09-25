@@ -315,9 +315,6 @@ conf_matrix1 <- confusionMatrix(x_pred, as.factor(y_train))
 print(conf_matrix)
 print(conf_matrix1)
 
-# Calculate accuracy
-accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
-print(paste("Accuracy: ", accuracy))
 
 # Now perform permutation importance
 set.seed(123) 
