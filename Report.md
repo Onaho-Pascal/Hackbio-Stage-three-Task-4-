@@ -23,10 +23,10 @@ Using the `TCGAbiolinks` library and the `edgeR` package, we performed different
 ![Volcano_plot_DEGs_female_vs_male](https://github.com/user-attachments/assets/3fdcea58-bf21-41c5-a639-39dee41332fd)
 ![Caption2](https://github.com/user-attachments/assets/ec9d42ec-6837-4683-a67d-dced5d3fb6cf)
 
-[EA_upregulated_female_vs_male.pdf](https://github.com/user-attachments/files/17129616/EA_upregulated_female_vs_male.pdf)
-![Caption3](https://github.com/user-attachments/assets/7ce12ea5-b393-49fd-9012-33121a13f652)
+![EA_upregulated_female_vs_male](https://github.com/user-attachments/assets/cce6c98f-4fa1-4c06-a079-cdf62ef35da5)
+![Caption3](https://github.com/user-attachments/assets/487e9150-07d0-4c9f-be02-f20b1f885e79)
 
-[EA_downregulated_female_vs_male.pdf](https://github.com/user-attachments/files/17129618/EA_downregulated_female_vs_male.pdf)
+![EA_downregulated_female_vs_male](https://github.com/user-attachments/assets/78463bfd-bea6-4647-ade2-fb4d47cad95a)
 ![Caption4](https://github.com/user-attachments/assets/e0f12ec4-ade0-4588-bcf2-0b6a174e3c76)
 
 ### Machine Learning
